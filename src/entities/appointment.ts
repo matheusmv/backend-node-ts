@@ -5,7 +5,17 @@ export interface AppointmentProps {
 }
 
 export class Appointment {
-  constructor(private props: AppointmentProps) {}
+  private props: AppointmentProps;
+
+  constructor(props: AppointmentProps) {
+    const { startsAt, endsAt } = props;
+
+    if (endsAt <= startsAt) {
+      throw new Error('Invalid end date');
+    }
+
+    this.props = props;
+  }
 
   get customer() {
     return this.props.customer;
