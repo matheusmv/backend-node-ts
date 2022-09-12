@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Appointment } from '../entities/appointment';
+import { getFutureDate } from '../tests/utils/get-future-date';
 import { CreateAppointment } from './create-appointment';
 
 describe('Create Appointment', () => {
@@ -8,11 +9,8 @@ describe('Create Appointment', () => {
 
     expect.assertions(1);
 
-    const startsAt = new Date();
-    const endsAt = new Date();
-
-    startsAt.setDate(startsAt.getDate() + 1);
-    endsAt.setDate(endsAt.getDate() + 2);
+    const startsAt = getFutureDate('2022-09-12');
+    const endsAt = getFutureDate('2022-09-13');
 
     expect(
       sut.execute({
