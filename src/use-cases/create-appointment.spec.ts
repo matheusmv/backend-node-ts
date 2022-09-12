@@ -21,4 +21,51 @@ describe('Create Appointment', () => {
       }),
     ).resolves.toBeInstanceOf(Appointment);
   });
+
+  it('should not be able to create an appointment with overlapping dates', async () => {
+    const sut = new CreateAppointment(new InMemoryAppointmentsRepository());
+
+    expect.assertions(4);
+
+    const startsAt = getFutureDate('2022-09-12');
+    const endsAt = getFutureDate('2022-09-16');
+
+    await sut.execute({
+      customer: 'Jhon Doe',
+      startsAt,
+      endsAt,
+    });
+
+    expect(
+      sut.execute({
+        customer: 'Alex Jhones',
+        startsAt: getFutureDate('2022-09-14'),
+        endsAt: getFutureDate('2022-09-18'),
+      }),
+    ).rejects.toBeInstanceOf(Error);
+
+    expect(
+      sut.execute({
+        customer: 'Alex Jhones',
+        startsAt: getFutureDate('2022-09-11'),
+        endsAt: getFutureDate('2022-09-13'),
+      }),
+    ).rejects.toBeInstanceOf(Error);
+
+    expect(
+      sut.execute({
+        customer: 'Alex Jhones',
+        startsAt: getFutureDate('2022-09-11'),
+        endsAt: getFutureDate('2022-09-18'),
+      }),
+    ).rejects.toBeInstanceOf(Error);
+
+    expect(
+      sut.execute({
+        customer: 'Alex Jhones',
+        startsAt: getFutureDate('2022-09-13'),
+        endsAt: getFutureDate('2022-09-14'),
+      }),
+    ).rejects.toBeInstanceOf(Error);
+  });
 });
