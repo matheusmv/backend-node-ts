@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { getFutureDate } from '../tests/utils/get-future-date';
 import { Appointment } from './appointment';
 
-test('create and appointment', () => {
+test('create an appointment', () => {
   const startsAt = getFutureDate('2022-09-12');
   const endsAt = getFutureDate('2022-09-13');
 
